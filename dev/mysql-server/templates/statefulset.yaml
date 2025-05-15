@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mysql
+  namespace: {{ .Values.mysql.namespace }}
+spec:
+  serviceName: mysql
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mysql
+  template:
+    metadata:
+      labels:
+        app: mysql
+    spec:
+      terminationGracePeriodSeconds: 10
+
+      containers:
+        - name: mysql
+          image: {{ .Values.mysql.image }}
+          ports:
+            - protocol: TCP
+              containerPort: 3306
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-secret
+                  key: MYSQL_ROOT_PASSWORD
+            - name: MYSQL_DATABASE
+              valueFrom:
+                configMapKeyRef:
+                  name: mysql-config
+                  key: MYSQL_DATABASE
+          volumeMounts:
+            - name: initdb
+              mountPath: /docker-entrypoint-initdb.d  # 초기 SQL 스크립트 주입
+            - name: mysql-storage
+              mountPath: /var/lib/mysql
+      volumes:
+        - name: initdb
+          configMap:
+            name: mysql-config
+        - name: mysql-storage
+          emptyDir: {}  # PVC 없이 실행 가능하도록 변경
+
+  volumeClaimTemplates: []  # PVC 제거
+
