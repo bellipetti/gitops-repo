@@ -7,7 +7,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/kimsinok0714/gitops-repo.git   # Helm Chart가 있는 Git 저장소
+    repoURL: https://github.com/bellipetti/gitops-repo.git   # Helm Chart가 있는 Git 저장소
     targetRevision: main                                       # Git 브랜치
     path: dev/mysql-server                                     # Git 저장소 내부 경로
     helm:

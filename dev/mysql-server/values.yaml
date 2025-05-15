@@ -8,6 +8,8 @@ mysql:
   service:
     type: ClusterIP
 
+autoscaling:
+  enabled: false  # 오토스케일링 비활성화
 
 initdb:
   enabled: true
@@ -16,4 +18,3 @@ initdb:
     CREATE DATABASE IF NOT EXISTS order_db;
     CREATE DATABASE IF NOT EXISTS item_db;
     CREATE DATABASE IF NOT EXISTS payment_db;
-
